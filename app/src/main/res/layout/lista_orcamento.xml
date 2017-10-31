@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+
+    <TextView
+            android:layout_height="match_parent"
+            android:id="@+id/tv_desceun_orc"
+            android:layout_width="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:padding="8dp"
+    />
+    <TextView
+            android:layout_height="match_parent"
+            android:id="@+id/tv_valorCanoinhas_orc"
+            android:layout_width="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:padding="8dp"
+    />
+
+    <TextView
+            android:layout_height="match_parent"
+            android:id="@+id/tv_valorChapeco_orc"
+            android:layout_width="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:visibility="invisible"
+            android:padding="8dp"
+    />
+
+    <TextView
+            android:layout_height="match_parent"
+            android:id="@+id/tv_valorJaragua_orc"
+            android:layout_width="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:padding="8dp"
+    />
+
+    <TextView
+            android:layout_height="match_parent"
+            android:id="@+id/tv_valorJoacaba_orc"
+            android:layout_width="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:padding="8dp"
+    />
+
+    <TextView
+            android:layout_height="match_parent"
+            android:id="@+id/tv_valorLages_orc"
+            android:layout_width="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:padding="8dp"
+    />
+
+    <TextView
+            android:layout_height="match_parent"
+            android:id="@+id/tv_valorRioSul_orc"
+            android:layout_width="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:padding="8dp"
+    />
+
+    <TextView
+            android:layout_height="match_parent"
+            android:id="@+id/tv_valorSulCatarinense_orc"
+            android:layout_width="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:padding="8dp"
+    />
+
+    <TextView
+            android:layout_height="match_parent"
+            android:id="@+id/tv_valorSaoMiguelOeste_orc"
+            android:layout_width="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:padding="8dp"
+    />
+
+
+
+
+
+
+</LinearLayout>

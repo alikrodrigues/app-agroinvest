@@ -1,0 +1,112 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="br.net.agroinvestapp.view.fragment.PesquisaFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <TextView
+                android:text="@string/txt_busca"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp" android:layout_marginStart="30dp" android:layout_marginTop="31dp"
+                android:id="@+id/textView" android:textSize="@dimen/text_medium" android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true" android:layout_alignParentStart="true"/>
+        <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:layout_below="@+id/textView" android:layout_alignLeft="@+id/textView"
+                android:layout_alignStart="@+id/textView" android:layout_marginTop="36dp"
+                android:id="@+id/edtPesquisa" android:layout_toLeftOf="@+id/imageButton"
+                android:layout_toStartOf="@+id/imageButton" android:hint="nome ou tipo"
+                android:textColor="@android:color/black"
+                android:textColorHint="@android:color/black"/>
+        <ImageButton
+                android:layout_width="100dp"
+                android:theme="@style/botaoPadrao"
+                android:layout_height="wrap_content" app:srcCompat="@drawable/ic_search"
+                android:id="@+id/imageButton"
+                android:layout_alignParentRight="true" android:layout_alignParentEnd="true"
+                android:layout_marginRight="15dp" android:layout_alignTop="@+id/edtPesquisa"
+                />
+        <Switch
+                android:text="Buscar todos os meses"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:layout_below="@+id/imageButton"
+                android:layout_alignLeft="@+id/edtPesquisa" android:layout_alignStart="@+id/edtPesquisa"
+                android:layout_marginTop="17dp" android:id="@+id/mesesSwitch" android:textColor="@android:color/black"/>
+        <TextView
+                android:text="Pesquisa direcionada"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:layout_below="@+id/mesesSwitch"
+                android:layout_alignLeft="@+id/mesesSwitch" android:layout_alignStart="@+id/mesesSwitch"
+                android:layout_marginTop="35dp" android:id="@+id/textView2" android:textSize="@dimen/text_medium"/>
+        <Switch
+                android:text="Lages"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp" android:id="@+id/lagesSwitch" android:textColor="@android:color/black"
+                android:layout_below="@+id/textView2" android:layout_alignRight="@+id/chapecoSwitch"
+                android:layout_alignEnd="@+id/chapecoSwitch"/>
+        <Switch
+                android:text="Canoinhas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/canoinhasSwitch"
+                android:textColor="@android:color/black"
+                android:layout_above="@+id/chapecoSwitch" android:layout_toRightOf="@+id/mesesSwitch"
+                android:layout_toEndOf="@+id/mesesSwitch"/>
+        <Switch
+                android:text="Chapecó"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="38dp" android:id="@+id/chapecoSwitch"
+                android:textColor="@android:color/black" android:layout_below="@+id/lagesSwitch"
+                android:layout_alignLeft="@+id/joacabaSwitch" android:layout_alignStart="@+id/joacabaSwitch"/>
+        <Switch
+                android:text="Jaragua do Sul"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/jaraguaSwitch" android:textColor="@android:color/black"
+                android:layout_alignBaseline="@+id/chapecoSwitch" android:layout_alignBottom="@+id/chapecoSwitch"
+                android:layout_alignRight="@+id/rioSwitch" android:layout_alignEnd="@+id/rioSwitch"/>
+        <Switch
+                android:text="Joaçaba"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="44dp" android:id="@+id/joacabaSwitch"
+                android:textColor="@android:color/black" android:layout_below="@+id/chapecoSwitch"
+                android:layout_alignRight="@+id/textView2" android:layout_alignEnd="@+id/textView2"
+                android:layout_marginRight="39dp" android:layout_marginEnd="39dp"/>
+        <Switch
+                android:text="Rio do Sul"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/rioSwitch" android:textColor="@android:color/black"
+                android:layout_alignTop="@+id/joacabaSwitch" android:layout_toRightOf="@+id/mesesSwitch"
+                android:layout_toEndOf="@+id/mesesSwitch"/>
+        <Switch
+                android:text="Sul Catarinense"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/sulCSwitch"
+                android:textColor="@android:color/black"
+                android:layout_marginTop="28dp"
+                android:layout_below="@+id/joacabaSwitch" android:layout_alignRight="@+id/joacabaSwitch"
+                android:layout_alignEnd="@+id/joacabaSwitch"/>
+        <Switch
+                android:text="São Miguel O"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/smoSwitch" android:textColor="@android:color/black"
+                android:layout_alignBaseline="@+id/sulCSwitch" android:layout_alignBottom="@+id/sulCSwitch"
+                android:layout_alignRight="@+id/rioSwitch" android:layout_alignEnd="@+id/rioSwitch"/>
+    </RelativeLayout>
+</FrameLayout>

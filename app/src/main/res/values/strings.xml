@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">AgroInvest</string>
+    <string name="rotulo_filtro">Busca completa:</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="txt_busca">Busca dados:</string>
+    <string name="txt_insumo">Selecione um ou mais</string>
+    <string name="txt_inst_insumo">Deslize ou selecione a aba da direita para ver orçamento</string>
+
+    <string name="title_activity_splash">SplashActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+</resources>
