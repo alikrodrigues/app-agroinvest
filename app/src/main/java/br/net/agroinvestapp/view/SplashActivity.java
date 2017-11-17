@@ -1,15 +1,11 @@
 package br.net.agroinvestapp.view;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import br.com.rafael.jpdroid.core.Jpdroid;
-import br.com.rafael.jpdroid.exceptions.JpdroidException;
 import br.net.agroinvestapp.R;
-import br.net.agroinvestapp.model.Insumo;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -71,7 +67,7 @@ public class SplashActivity extends AppCompatActivity {
 
 
     public void mostraMain(){
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, PrincipalActivity.class);
         startActivity(intent);
         finish();
     }

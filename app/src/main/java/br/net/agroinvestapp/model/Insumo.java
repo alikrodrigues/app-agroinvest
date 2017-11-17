@@ -1,11 +1,15 @@
 package br.net.agroinvestapp.model;
 
-import br.com.rafael.jpdroid.annotations.Column;
-import br.com.rafael.jpdroid.annotations.Entity;
-import br.com.rafael.jpdroid.annotations.PrimaryKey;
+import br.com.rafael.jpdroid.annotations.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.io.Serializable;
 
 @Entity
-public class Insumo {
+public class Insumo implements Serializable {
+
+
+    private static final long serialVersionUID = 1031624177537342820L;
     @PrimaryKey
     @Column(name = "_id")
     private long _id;
@@ -40,8 +44,17 @@ public class Insumo {
     @Column
     private String valorSaoMiguelOeste;
 
+
+    @Ignorable
+    @JsonIgnore
+    private int checado;
+
     @Column
     private String periodo;
+
+    @ForeignKey(joinEntity=Orcamento.class,joinPrimaryKey="_id",deleteCascade=true)
+    @Column
+    private Long idOrcamento;
 
 
     public long get_Id() {
@@ -146,5 +159,43 @@ public class Insumo {
 
     public void setValorSaoMiguelO(String valorSaoMiguelOeste) {
         this.valorSaoMiguelOeste = valorSaoMiguelOeste;
+    }
+
+    @JsonIgnore
+    public Long getIdOrcamento() {
+        return idOrcamento;
+    }
+
+    public void setIdOrcamento(Long idOrcamento) {
+        this.idOrcamento = idOrcamento;
+    }
+
+    public int getChecado() {
+        return checado;
+    }
+
+    public void setChecado(int checado) {
+        this.checado = checado;
+    }
+
+    @Override
+    public String toString() {
+        return "Insumo{" +
+                "_id=" + _id +
+                ", descricao='" + descricao + '\'' +
+                ", unidadeMedida='" + unidadeMedida + '\'' +
+                ", valorCanoinhas='" + valorCanoinhas + '\'' +
+                ", categoria='" + categoria + '\'' +
+                ", valorChapeco='" + valorChapeco + '\'' +
+                ", valorJaragua='" + valorJaragua + '\'' +
+                ", valorJoacaba='" + valorJoacaba + '\'' +
+                ", valorLages='" + valorLages + '\'' +
+                ", valorRioSul='" + valorRioSul + '\'' +
+                ", valorSulCatarinense='" + valorSulCatarinense + '\'' +
+                ", valorSaoMiguelOeste='" + valorSaoMiguelOeste + '\'' +
+                ", checado=" + checado +
+                ", periodo='" + periodo + '\'' +
+                ", idOrcamento=" + idOrcamento +
+                '}';
     }
 }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools" tools:context=".view.WebActivity">
+
+    <item android:id="@+id/globoRural"
+          android:title="Ir para Globo Rural"
+          android:orderInCategory="100"
+          app:showAsAction="never" />
+
+    <item android:id="@+id/globoAgro"
+          android:title="Ir para Globo Agronegocio"
+          android:orderInCategory="200"
+          app:showAsAction="never" />
+
+    <item android:id="@+id/epagri"
+          android:title="Ir para Epagri SC"
+          android:orderInCategory="300"
+          app:showAsAction="never"
+         />
+
+
+
+</menu>

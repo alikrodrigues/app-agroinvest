@@ -39,9 +39,8 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile group: 'com.j256.ormlite', name: 'ormlite-android', version: '5.0'
-
-    compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.jakewharton:butterknife:8.8.1'
     compile 'com.android.support:support-v4:26.+'
     compile 'org.springframework.android:spring-android-rest-template:1.0.1.RELEASE'

@@ -3,7 +3,7 @@
     <color name="colorPrimary">#3fb566</color>
     <color name="colorPrimaryDark">#5b9f30</color>
     <color name="colorAccent">#40ff90</color>
-    <color name="corBackOrcamento">#969494</color>
-
+    <color name="corBackOrcamento">#d4d0d0</color>
+    <color name="warningInsumo">#fc0101</color>
     <color name="black_overlay">#66000000</color>
 </resources>

@@ -6,14 +6,10 @@ import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 import br.com.rafael.jpdroid.core.Jpdroid;
 import br.com.rafael.jpdroid.exceptions.JpdroidException;
-import br.net.agroinvestapp.R;
-import br.net.agroinvestapp.configure.ConfiguracaoBanco;
-import br.net.agroinvestapp.configure.adapter.InsumoAdapter;
+import br.net.agroinvestapp.configure.JpdroidSQL.ConfiguracaoBanco;
 import br.net.agroinvestapp.model.Insumo;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
@@ -43,7 +39,8 @@ public class AtualizaBancoHttoRequest extends AsyncTask<Void,Void,List<Insumo>> 
             insumos = Arrays.asList(insumo);
             return insumos;
         } catch (Exception e) {
-            Log.e("MainActivity", e.getMessage(), e);
+//           doInBackground();
+             Log.e("NovoOrcamentoActivity", e.getMessage(), e);
         }
 
         return null;
@@ -54,7 +51,12 @@ public class AtualizaBancoHttoRequest extends AsyncTask<Void,Void,List<Insumo>> 
 
         bancoDados = ConfiguracaoBanco.getBancodeDados(activity);
         Insumo local = new Insumo();
-        Cursor cursor = bancoDados.createQuery(Insumo.class);
+        Cursor cursor;
+        try {
+            cursor = bancoDados.createQuery(Insumo.class, "idOrcamento is Null");
+        }catch (Exception e ){
+            cursor= bancoDados.createQuery(Insumo.class);
+        }
         cursor.moveToFirst();
         if (cursor.getCount() < 5) {
             for (Insumo insumo : insumosList) {
@@ -79,6 +81,7 @@ public class AtualizaBancoHttoRequest extends AsyncTask<Void,Void,List<Insumo>> 
 
             if (!local.getPeriodo().equals(insumosList.get(0).getPeriodo())) {
 
+
                 final List<Insumo> insumosl = insumosList;
                 new AlertDialog.Builder(activity)
                         .setTitle("Atualizando dados")
@@ -87,6 +90,9 @@ public class AtualizaBancoHttoRequest extends AsyncTask<Void,Void,List<Insumo>> 
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
+
+                                        bancoDados.execSQL("DELETE FROM insumo WHERE idOrcamento is NULL");
+
                                         for (Insumo insumo : insumosl) {
 
                                             try {
