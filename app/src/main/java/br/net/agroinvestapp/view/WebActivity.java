@@ -11,22 +11,29 @@ import android.webkit.WebView;
 import br.net.agroinvestapp.R;
 import br.net.agroinvestapp.configure.preferences.PreferenciaClass;
 import br.net.agroinvestapp.model.Preferencias;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import java.util.HashMap;
 
 public class WebActivity extends AppCompatActivity {
 
-    private WebView webView;
+
+    @BindView(R.id.webViewId) WebView webView;
     private PreferenciaClass pŕefenciasClasse;
     private String site;
     private Toolbar toolbar;
+    private String epagri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web);
+        ButterKnife.bind(this);
+        epagri = getIntent().getStringExtra("epagri");
 
-        webView = (WebView) findViewById(R.id.webViewId);
+
+
         toolbar = (Toolbar) findViewById(R.id.toolbar_principal);
         toolbar.setBackgroundColor(Color.parseColor("#3fb566"));
          toolbar.setTitle("AgroInvest");
@@ -64,10 +71,9 @@ public class WebActivity extends AppCompatActivity {
     }
 
     private Preferencias getSite(){
-        Preferencias preferencias = new Preferencias();
+        Preferencias preferencias;
         pŕefenciasClasse = new PreferenciaClass(this);
-        HashMap<String,String> pf = pŕefenciasClasse.getPreferencias();
-        preferencias.setSitePreferido(pf.get("SITE"));
+        preferencias = pŕefenciasClasse.getPreferencias();
         return preferencias;
     }
 
@@ -81,7 +87,13 @@ public class WebActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        String site = getSite().getSitePreferido();
+        String site="";
+        if(epagri!=null){
+            site = "http://www.epagri.sc.gov.br/";
+        }else{
+            if(getSite()!=null)
+            site = getSite().getSitePreferido();
+        }
         if(site !=null && site.length() > 2){
             this.site = site;
             webView.loadUrl(site);
@@ -98,7 +110,6 @@ public class WebActivity extends AppCompatActivity {
         Preferencias preferencias = new Preferencias();
         preferencias.setSitePreferido(webView.getUrl());
         pŕefenciasClasse.salvarPreferencias(preferencias);
-//        webView.destroy();
         super.onStop();
     }
 
@@ -108,7 +119,6 @@ public class WebActivity extends AppCompatActivity {
         Preferencias preferencias = new Preferencias();
         preferencias.setSitePreferido(webView.getUrl());
         pŕefenciasClasse.salvarPreferencias(preferencias);
-//        webView.destroy();
         super.onDestroy();
     }
 }

@@ -18,6 +18,8 @@ import br.net.agroinvestapp.configure.JpdroidSQL.ConfiguracaoBanco;
 import br.net.agroinvestapp.configure.adapter.OrcamentoSalvoAdapter;
 import br.net.agroinvestapp.model.Insumo;
 import br.net.agroinvestapp.model.Orcamento;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import java.io.Serializable;
 import java.lang.ref.SoftReference;
@@ -27,8 +29,8 @@ import java.util.List;
 public class ListaOrcamentosActivity extends AppCompatActivity {
 
 
-    private EditText pesquisa;
-    private ListView listaOrcamentoSalvo;
+    @BindView(R.id.edtOrcamSalvo) EditText pesquisa;
+    @BindView(R.id.listaOrcamentosSalvos) ListView listaOrcamentoSalvo;
     private List<Orcamento> orcamentos;
     private String filtro = "";
     private ArrayAdapter<Orcamento> orcamentoSalvoAdapter;
@@ -39,9 +41,10 @@ public class ListaOrcamentosActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_orcamentos);
 
+        ButterKnife.bind(this);
+
         orcamentos = new ArrayList<>();
-        pesquisa = (EditText) findViewById(R.id.edtOrcamSalvo);
-        listaOrcamentoSalvo = (ListView) findViewById(R.id.listaOrcamentosSalvos);
+
         toolbar = (Toolbar) findViewById(R.id.toolbar_principal);
 
         toolbar.setTitle("AgroInvest");
@@ -95,7 +98,6 @@ public class ListaOrcamentosActivity extends AppCompatActivity {
         listaOrcamentoSalvo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                Log.i("Parametro:", orcamentos.get(position).getData());
 
              new AlertDialog.Builder(ListaOrcamentosActivity.this).setTitle("AGROINVEST")
                      .setMessage("Deseja Abrir o orçamento: \n "+orcamentos.get(position).getDescricao()+" ?")
@@ -103,11 +105,7 @@ public class ListaOrcamentosActivity extends AppCompatActivity {
                          @Override
                          public void onClick(DialogInterface dialog, int which) {
                              Bundle bundle = new Bundle();
-                             bundle.putSerializable("activity_insumos", (Serializable) orcamentos.get(position).getInsumos() );
                              Intent intent = new Intent(ListaOrcamentosActivity.this ,OrcamentoActivity.class);
-                             Log.i("Insumos:", orcamentos.get(position).getInsumos().get(0).getDescricao());
-                             intent.putExtra("parametro",orcamentos.get(position).getParametro());
-                             intent.putExtra("bundle",bundle);
                              intent.putExtra("id",orcamentos.get(position).get_id());
                              startActivity(intent);
 
@@ -121,14 +119,14 @@ public class ListaOrcamentosActivity extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable("InstaciaOrcamento", (Serializable) this.orcamentos);
+//        outState.putSerializable("InstaciaOrcamento", (Serializable) this.orcamentos);
         super.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        orcamentos =(List<Orcamento>) savedInstanceState.getSerializable("InstanciaOrcamento");
+//        orcamentos =(List<Orcamento>) savedInstanceState.getSerializable("InstanciaOrcamento");
     }
 
     private void requisitaLoca(String filtro){

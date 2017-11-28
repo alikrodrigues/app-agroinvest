@@ -14,6 +14,8 @@ import br.net.agroinvestapp.R;
 import br.net.agroinvestapp.configure.JpdroidSQL.ConfiguracaoBanco;
 import br.net.agroinvestapp.configure.adapter.InsumoAdapter;
 import br.net.agroinvestapp.model.Insumo;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -21,14 +23,16 @@ import java.util.List;
 
 public class InsumosActivity extends AppCompatActivity {
 
-    private  ListView listView;
+    @BindView(R.id.listInsumos)
+    ListView listView;
+    @BindView(R.id.edtContador) EditText contadorSelecionados;
+    @BindView(R.id.edtPesquisa) EditText edtPesquisa;
     private  ArrayAdapter<Insumo> adapter;
     private ArrayList<Insumo> insumos;
     private String filtro;
     private String parametro;
     private List<Insumo> selecionados;
-    private EditText contadorSelecionados;
-    private EditText edtPesquisa;
+
 
     //Banco local
     private Jpdroid bancoLocal;
@@ -50,13 +54,11 @@ public class InsumosActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_insumos);
-
+        ButterKnife.bind(this);
         insumos = new ArrayList<>();
         selecionados = new ArrayList<>();
 
-        listView = (ListView) findViewById(R.id.listInsumos);
-        contadorSelecionados = (EditText) findViewById(R.id.edtContador);
-        edtPesquisa = (EditText) findViewById(R.id.edtPesquisa);
+
 
         Intent intent = getIntent();
         filtro = intent.getStringExtra("filtro");

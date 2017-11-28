@@ -10,7 +10,9 @@ import android.widget.Toast;
 import br.com.rafael.jpdroid.core.Jpdroid;
 import br.com.rafael.jpdroid.exceptions.JpdroidException;
 import br.net.agroinvestapp.configure.JpdroidSQL.ConfiguracaoBanco;
+import br.net.agroinvestapp.configure.preferences.PreferenciaClass;
 import br.net.agroinvestapp.model.Insumo;
+import br.net.agroinvestapp.model.Preferencias;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
@@ -18,11 +20,12 @@ import java.util.Arrays;
 import java.util.List;
 
 public class AtualizaBancoHttoRequest extends AsyncTask<Void,Void,List<Insumo>> {
-    private String URL_SERVER = "http://54.207.91.56:8080/ws-agroinvest/insumos/";
+    private String URL_SERVER = "http://www.agroinvest.net.br:8080/ws-agroinvest/insumos";
     private List<Insumo> insumos;
     private Activity activity;
     private Jpdroid bancoDados;
     private int indexPeriodo;
+    private String periodo;
 
 
     public AtualizaBancoHttoRequest(Activity activity) {
@@ -48,15 +51,11 @@ public class AtualizaBancoHttoRequest extends AsyncTask<Void,Void,List<Insumo>> 
 
     @Override
     protected void onPostExecute(List<Insumo> insumosList) {
-
+        periodo = insumosList.get(0).getPeriodo();
         bancoDados = ConfiguracaoBanco.getBancodeDados(activity);
         Insumo local = new Insumo();
         Cursor cursor;
-        try {
-            cursor = bancoDados.createQuery(Insumo.class, "idOrcamento is Null");
-        }catch (Exception e ){
-            cursor= bancoDados.createQuery(Insumo.class);
-        }
+        cursor = bancoDados.createQuery(Insumo.class, "idOrcamento is Null");
         cursor.moveToFirst();
         if (cursor.getCount() < 5) {
             for (Insumo insumo : insumosList) {
@@ -71,7 +70,10 @@ public class AtualizaBancoHttoRequest extends AsyncTask<Void,Void,List<Insumo>> 
                 }
             }
             Toast.makeText(activity, "Atualizado com sucesso !", Toast.LENGTH_LONG).show();
-
+            Preferencias preferencias = new Preferencias();
+            preferencias.setUltAtualizacao(periodo);
+            PreferenciaClass preferenciaClass= new PreferenciaClass(activity);
+            preferenciaClass.salvarLastUpdate(preferencias);
 
         } else {
             indexPeriodo = cursor.getColumnIndex("periodo");
@@ -105,6 +107,10 @@ public class AtualizaBancoHttoRequest extends AsyncTask<Void,Void,List<Insumo>> 
                                             }
                                         }
                                         Toast.makeText(activity,"Sucesso !", Toast.LENGTH_SHORT).show();
+                                        Preferencias preferencias = new Preferencias();
+                                        preferencias.setUltAtualizacao(periodo);
+                                        PreferenciaClass preferenciaClass= new PreferenciaClass(activity);
+                                        preferenciaClass.salvarLastUpdate(preferencias);
                                     }
                                 })
                         .setNegativeButton("Não Agora.",null)

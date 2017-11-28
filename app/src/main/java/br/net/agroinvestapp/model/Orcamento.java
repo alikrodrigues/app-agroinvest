@@ -86,7 +86,7 @@ public class Orcamento {
                 ", data='" + data + '\'' +
                 ", parametro='" + parametro + '\'' +
                 ", concluido=" + concluido +
-                ", activity_insumos=" + insumos +
+                ", insumos=" + insumos +
                 '}';
     }
 }

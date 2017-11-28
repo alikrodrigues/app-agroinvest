@@ -3,6 +3,7 @@ package br.net.agroinvestapp.view;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
@@ -17,10 +18,15 @@ import br.com.rafael.jpdroid.exceptions.JpdroidException;
 import br.net.agroinvestapp.R;
 import br.net.agroinvestapp.configure.JpdroidSQL.ConfiguracaoBanco;
 import br.net.agroinvestapp.configure.adapter.OrcamentoAdapter;
+import br.net.agroinvestapp.configure.preferences.PreferenciaClass;
 import br.net.agroinvestapp.configure.restClient.EnviaEmailHttpRequest;
 import br.net.agroinvestapp.model.Insumo;
 import br.net.agroinvestapp.model.Orcamento;
+import br.net.agroinvestapp.model.Preferencias;
 import br.net.agroinvestapp.view.dialog.Dialog_cidadesActivity;
+import butterknife.BindView;
+import butterknife.BindViews;
+import butterknife.ButterKnife;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -33,10 +39,17 @@ public class OrcamentoActivity extends AppCompatActivity {
 
     private List<Insumo> insumos;
 
-    private TextView legenda;
-    private Button btnFinalizar;
-    private Button btnSaveSend;
-    private ListView listView;
+    @BindView(R.id.legendaLaranj)
+    TextView legendaLaranj;
+    @BindView(R.id.legenda)
+    TextView legenda;
+
+    @BindView(R.id.btnFinalizar)
+    Button btnFinalizar;
+    @BindView(R.id.btnSaveSend)
+    Button btnSaveSend;
+    @BindView(R.id.listOrca)
+    ListView listView;
     private String colunasPrecos="";
     private OrcamentoAdapter adapter;
     public String parametro;
@@ -44,29 +57,23 @@ public class OrcamentoActivity extends AppCompatActivity {
     private String email="";
     public boolean valida = false;
     NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt","BR"));
-
     private boolean validaCheckedTV=false;
     private long id;
-
     //colunas
-    private EditText c1;
-    private EditText c2;
-    private EditText c3;
-    private EditText c4;
-    private EditText c5;
-    private EditText c6;
-    private EditText c7;
-    private EditText c8;
-
+    @BindViews({R.id.c1,R.id.c2,R.id.c3,R.id.c4,R.id.c5,R.id.c6,R.id.c7,R.id.c8})
+    List<EditText> coluna;
     //valores
-    private EditText v1;
-    private EditText v2;
-    private EditText v3;
-    private EditText v4;
-    private EditText v5;
-    private EditText v6;
-    private EditText v7;
-    private EditText v8;
+    @BindViews({R.id.v1,R.id.v2,R.id.v3,R.id.v4,R.id.v5,R.id.v6,R.id.v7,R.id.v8})
+    List<EditText> valores;
+    //colunaLaranja
+    private boolean lagesLaranja = false;
+    private boolean canoinhasLaranja = false;
+    private boolean chapecoLaranja = false;
+    private boolean joacabaLaranja = false;
+    private boolean jaraguaLaranja = false;
+    private boolean rioSulLaranja = false;
+    private boolean sulCatarinenseLaranja = false;
+    private boolean saoMiguelOLaranja = false;
 
 
     // somas
@@ -85,28 +92,7 @@ public class OrcamentoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_orcamento);
 
-        listView = (ListView) findViewById(R.id.listOrca);
-        legenda =(TextView) findViewById(R.id.legenda);
-        btnFinalizar=(Button) findViewById(R.id.btnFinalizar);
-        btnSaveSend = (Button) findViewById(R.id.btnSaveSend);
-
-        c1= (EditText) findViewById(R.id.c1);
-        c2= (EditText) findViewById(R.id.c2);
-        c3= (EditText) findViewById(R.id.c3);
-        c4= (EditText) findViewById(R.id.c4);
-        c5= (EditText) findViewById(R.id.c5);
-        c6= (EditText) findViewById(R.id.c6);
-        c7= (EditText) findViewById(R.id.c7);
-        c8= (EditText) findViewById(R.id.c8);
-
-        v1= (EditText) findViewById(R.id.v1);
-        v2= (EditText) findViewById(R.id.v2);
-        v3= (EditText) findViewById(R.id.v3);
-        v4= (EditText) findViewById(R.id.v4);
-        v5= (EditText) findViewById(R.id.v5);
-        v6= (EditText) findViewById(R.id.v6);
-        v7= (EditText) findViewById(R.id.v7);
-        v8= (EditText) findViewById(R.id.v8);
+        ButterKnife.bind(this);
 
         insumos = new ArrayList<>();
 
@@ -124,11 +110,18 @@ public class OrcamentoActivity extends AppCompatActivity {
         else {
             btnFinalizar.setText("Editar");
             btnSaveSend.setText("Enviar email");
+            PreferenciaClass preferenciaClass = new PreferenciaClass(this);
+            Preferencias preferencias = preferenciaClass.getPreferencias();
+            if(preferencias!=null&&preferencias.getEmailPreferido()!=null){
+                m_Text=preferencias.getEmailPreferido();
+            }
             if(parametro==null){
                 Jpdroid bancoJpdroid = ConfiguracaoBanco.getBancodeDados(OrcamentoActivity.this);
                 Orcamento orcamento =(Orcamento) bancoJpdroid.retrieve(Orcamento.class,"_id = "+id,true).get(0);
                 parametro = orcamento.getParametro();
+                Log.i("DEBUG",orcamento.getInsumos().get(0).getDescricao());
                 if(insumos.size()<1){
+                    Log.i("DEBUG","teste");
                     insumos = orcamento.getInsumos();
                 }
             }
@@ -144,32 +137,24 @@ public class OrcamentoActivity extends AppCompatActivity {
                 salvarOrcamento();
             }
         });
+
         montaResumo(parametro);
         desativaEdtText();
         adapter = new OrcamentoAdapter(this,insumos,parametro);
         listView.setAdapter(adapter);
+        legendaLaranj.setTextColor(Color.parseColor("#F1A629"));
         if(!validaCheckedTV)legenda.setVisibility(View.GONE);
+        if((!lagesLaranja&&!joacabaLaranja&&!jaraguaLaranja&&!saoMiguelOLaranja&&
+                !sulCatarinenseLaranja&&!rioSulLaranja&&!chapecoLaranja&&!canoinhasLaranja)
+                )legendaLaranj.setVisibility(View.GONE);
     }
 
     /*Metodo responsavel por desativar os edit text para não interação do usuario*/
     private void desativaEdtText(){
-        c1.setEnabled(false);
-        c2.setEnabled(false);
-        c3.setEnabled(false);
-        c4.setEnabled(false);
-        c5.setEnabled(false);
-        c6.setEnabled(false);
-        c7.setEnabled(false);
-        c8.setEnabled(false);
 
-        v1.setEnabled(false);
-        v2.setEnabled(false);
-        v3.setEnabled(false);
-        v4.setEnabled(false);
-        v5.setEnabled(false);
-        v6.setEnabled(false);
-        v7.setEnabled(false);
-        v8.setEnabled(false);
+        ButterKnife.apply(coluna,DISABLE);
+        ButterKnife.apply(valores,DISABLE);
+
     }
 
     /*Metodo Responsavel por receber o parametro e montar um resumo com os valores e as colunas das regiões selecionadas*/
@@ -179,6 +164,7 @@ public class OrcamentoActivity extends AppCompatActivity {
             for (Insumo insumo : insumos) {
                 if (insumo.getValorLages().contains("..")) {
                     validaCheckedTV = true;
+                    lagesLaranja = true;
                     somaLages += new Double(0);
                 }else
                     somaLages = somaLages + Double.parseDouble(insumo.getValorLages().replace(",", ".").replace(" ", ""));
@@ -190,6 +176,7 @@ public class OrcamentoActivity extends AppCompatActivity {
             for (Insumo insumo : insumos) {
                 if (insumo.getValorCanoinhas().contains("..")){
                     validaCheckedTV = true;
+                    canoinhasLaranja=true;
                     somaCanoinhas += new Double(0);
             }else
                     somaCanoinhas = somaCanoinhas + Double.parseDouble(insumo.getValorCanoinhas().replace(",", ".").replace(" ", ""));
@@ -202,6 +189,7 @@ public class OrcamentoActivity extends AppCompatActivity {
             for (Insumo insumo : insumos) {
                 if (insumo.getValorChapeco().contains("..")){
                     validaCheckedTV=true;
+                    chapecoLaranja=true;
                     somaChapeco += new Double(0);
                 }
                 else
@@ -215,6 +203,7 @@ public class OrcamentoActivity extends AppCompatActivity {
             for(Insumo insumo : insumos){
                 if(insumo.getValorJaragua().contains("..")){
                     validaCheckedTV=true;
+                    jaraguaLaranja=true;
                     somaJaragua+= new Double(0);
                 }
                 else somaJaragua =somaJaragua + Double.parseDouble(insumo.getValorJaragua().replace(",",".").replace(" ",""));
@@ -226,6 +215,7 @@ public class OrcamentoActivity extends AppCompatActivity {
             for(Insumo insumo : insumos){
                 if(insumo.getValorJoacaba().contains("..")){
                     validaCheckedTV=true;
+                    joacabaLaranja=true;
                     somaJoacaba+= new Double(0);
                 }
                 else somaJoacaba =somaJoacaba + Double.parseDouble(insumo.getValorJoacaba().replace(",",".").replace(" ",""));
@@ -238,6 +228,7 @@ public class OrcamentoActivity extends AppCompatActivity {
             for(Insumo insumo : insumos){
                 if(insumo.getValorRioSul().contains("..")){
                     validaCheckedTV=true;
+                    rioSulLaranja=true;
                     somaRiosul+= new Double(0);
                 }
                 else somaRiosul =somaRiosul + Double.parseDouble(insumo.getValorRioSul().replace(",",".").replace(" ",""));
@@ -250,6 +241,7 @@ public class OrcamentoActivity extends AppCompatActivity {
             for(Insumo insumo : insumos){
                 if(insumo.getValorSulCatarinense().contains("..")) {
                     validaCheckedTV=true;
+                    sulCatarinenseLaranja=true;
                     somaSulcata+= new Double(0);
                 }
                 else somaSulcata =somaSulcata + Double.parseDouble(insumo.getValorSulCatarinense().replace(",",".").replace(" ",""));
@@ -258,10 +250,11 @@ public class OrcamentoActivity extends AppCompatActivity {
         }
 
         if(parametro.contains("saoMiguelO")){
-            colunasPrecos =colunasPrecos + "Sao Miguel,";
+            colunasPrecos =colunasPrecos + "São Miguel,";
             for(Insumo insumo : insumos){
                 if(insumo.getValorSaoMiguelO().contains("..")) {
                     validaCheckedTV=true;
+                    saoMiguelOLaranja = true;
                     somaSaoMiguel+= new Double(0);
                 }
                 else somaSaoMiguel =somaSaoMiguel + Double.parseDouble(insumo.getValorSaoMiguelO().replace(",",".").replace(" ",""));
@@ -275,113 +268,196 @@ public class OrcamentoActivity extends AppCompatActivity {
 
     }
 
+
     /*Atraves do Array de String criado com o montaResumo, agora montamos a coluna e preços em seus devidos EditText*/
     private void montaColuna(String[] vetorColuna){
 
 
         switch (vetorColuna.length){
             case 1:
-                c1.setText(vetorColuna[0]);
-                v1.setText(nf.format(somaLages));
+                coluna.get(0).setText(vetorColuna[0]);
+                valores.get(0).setText(nf.format(somaLages));
+                if(lagesLaranja)coluna.get(0).setTextColor(Color.parseColor("#F1A629"));
+                if(somaLages<=0)coluna.get(0).setTextColor(Color.RED);
                 break;
 
             case 2:
-                c1.setText(vetorColuna[0]);
-                c2.setText(vetorColuna[1]);
+                coluna.get(0).setText(vetorColuna[0]);
+                coluna.get(1).setText(vetorColuna[1]);
 
-                v1.setText(nf.format(somaLages));
-                v2.setText(nf.format(somaCanoinhas));
+                valores.get(0).setText(nf.format(somaLages));
+                valores.get(1).setText(nf.format(somaCanoinhas));
+                if(lagesLaranja)coluna.get(0).setTextColor(Color.parseColor("#F1A629"));
+                if(canoinhasLaranja)coluna.get(1).setTextColor(Color.parseColor("#F1A629"));
+
+                if(somaLages<=0)coluna.get(0).setTextColor(Color.RED);
+                if(somaCanoinhas<=0)coluna.get(1).setTextColor(Color.RED);
                 break;
 
             case 3:
-                c1.setText(vetorColuna[0]);
-                c2.setText(vetorColuna[1]);
-                c3.setText(vetorColuna[2]);
+                coluna.get(0).setText(vetorColuna[0]);
+                coluna.get(1).setText(vetorColuna[1]);
+                coluna.get(2).setText(vetorColuna[2]);
 
-                v1.setText(nf.format(somaLages));
-                v2.setText(nf.format(somaCanoinhas));
-                v3.setText(nf.format(somaChapeco));
+                valores.get(0).setText(nf.format(somaLages));
+                valores.get(1).setText(nf.format(somaCanoinhas));
+                valores.get(2).setText(nf.format(somaChapeco));
+                if(lagesLaranja)coluna.get(0).setTextColor(Color.parseColor("#F1A629"));
+                if(canoinhasLaranja)coluna.get(1).setTextColor(Color.parseColor("#F1A629"));
+                if(chapecoLaranja)coluna.get(2).setTextColor(Color.parseColor("#F1A629"));
+
+                if(somaLages<=0)coluna.get(0).setTextColor(Color.RED);
+                if(somaCanoinhas<=0)coluna.get(1).setTextColor(Color.RED);
+                if(somaChapeco<=0)coluna.get(2).setTextColor(Color.RED);
+
                 break;
 
             case 4:
-                c1.setText(vetorColuna[0]);
-                c2.setText(vetorColuna[1]);
-                c3.setText(vetorColuna[2]);
-                c4.setText(vetorColuna[3]);
+                coluna.get(0).setText(vetorColuna[0]);
+                coluna.get(1).setText(vetorColuna[1]);
+                coluna.get(2).setText(vetorColuna[2]);
+                coluna.get(3).setText(vetorColuna[3]);
 
-                v1.setText(nf.format(somaLages));
-                v2.setText(nf.format(somaCanoinhas));
-                v3.setText(nf.format(somaChapeco));
-                v4.setText(nf.format(somaJaragua));
+                valores.get(0).setText(nf.format(somaLages));
+                valores.get(1).setText(nf.format(somaCanoinhas));
+                valores.get(2).setText(nf.format(somaChapeco));
+                valores.get(3).setText(nf.format(somaJaragua));
+                if(lagesLaranja)coluna.get(0).setTextColor(Color.parseColor("#F1A629"));
+                if(canoinhasLaranja)coluna.get(1).setTextColor(Color.parseColor("#F1A629"));
+                if(chapecoLaranja)coluna.get(2).setTextColor(Color.parseColor("#F1A629"));
+                if(jaraguaLaranja)coluna.get(3).setTextColor(Color.parseColor("#F1A629"));
+
+                if(somaLages<=0)coluna.get(0).setTextColor(Color.RED);
+                if(somaCanoinhas<=0)coluna.get(1).setTextColor(Color.RED);
+                if(somaChapeco<=0)coluna.get(2).setTextColor(Color.RED);
+                if(somaJaragua<=0)coluna.get(3).setTextColor(Color.RED);
                 break;
 
             case 5:
-                c1.setText(vetorColuna[0]);
-                c2.setText(vetorColuna[1]);
-                c3.setText(vetorColuna[2]);
-                c4.setText(vetorColuna[3]);
-                c5.setText(vetorColuna[4]);
+                coluna.get(0).setText(vetorColuna[0]);
+                coluna.get(1).setText(vetorColuna[1]);
+                coluna.get(2).setText(vetorColuna[2]);
+                coluna.get(3).setText(vetorColuna[3]);
+                coluna.get(4).setText(vetorColuna[4]);
 
 
-                v1.setText(nf.format(somaLages));
-                v2.setText(nf.format(somaCanoinhas));
-                v3.setText(nf.format(somaChapeco));
-                v4.setText(nf.format(somaJaragua));
-                v5.setText(nf.format(somaJoacaba));
+                valores.get(0).setText(nf.format(somaLages));
+                valores.get(1).setText(nf.format(somaCanoinhas));
+                valores.get(2).setText(nf.format(somaChapeco));
+                valores.get(3).setText(nf.format(somaJaragua));
+                valores.get(4).setText(nf.format(somaJoacaba));
+                if(lagesLaranja)coluna.get(0).setTextColor(Color.parseColor("#F1A629"));
+                if(canoinhasLaranja)coluna.get(1).setTextColor(Color.parseColor("#F1A629"));
+                if(chapecoLaranja)coluna.get(2).setTextColor(Color.parseColor("#F1A629"));
+                if(jaraguaLaranja)coluna.get(3).setTextColor(Color.parseColor("#F1A629"));
+                if(joacabaLaranja)coluna.get(4).setTextColor(Color.parseColor("#F1A629"));
+
+                if(somaLages<=0)coluna.get(0).setTextColor(Color.RED);
+                if(somaCanoinhas<=0)coluna.get(1).setTextColor(Color.RED);
+                if(somaChapeco<=0)coluna.get(2).setTextColor(Color.RED);
+                if(somaJaragua<=0)coluna.get(3).setTextColor(Color.RED);
+                if(somaJoacaba<=0)coluna.get(4).setTextColor(Color.RED);
                 break;
 
             case 6:
-                c1.setText(vetorColuna[0]);
-                c2.setText(vetorColuna[1]);
-                c3.setText(vetorColuna[2]);
-                c4.setText(vetorColuna[3]);
-                c5.setText(vetorColuna[4]);
-                c6.setText(vetorColuna[5]);
+                coluna.get(0).setText(vetorColuna[0]);
+                coluna.get(1).setText(vetorColuna[1]);
+                coluna.get(2).setText(vetorColuna[2]);
+                coluna.get(3).setText(vetorColuna[3]);
+                coluna.get(4).setText(vetorColuna[4]);
+                coluna.get(5).setText(vetorColuna[5]);
 
-                v1.setText(nf.format(somaLages));
-                v2.setText(nf.format(somaCanoinhas));
-                v3.setText(nf.format(somaChapeco));
-                v4.setText(nf.format(somaJaragua));
-                v5.setText(nf.format(somaJoacaba));
-                v6.setText(nf.format(somaRiosul));
+                valores.get(0).setText(nf.format(somaLages));
+                valores.get(1).setText(nf.format(somaCanoinhas));
+                valores.get(2).setText(nf.format(somaChapeco));
+                valores.get(3).setText(nf.format(somaJaragua));
+                valores.get(4).setText(nf.format(somaJoacaba));
+                valores.get(5).setText(nf.format(somaRiosul));
+                if(lagesLaranja)coluna.get(0).setTextColor(Color.parseColor("#F1A629"));
+                if(canoinhasLaranja)coluna.get(1).setTextColor(Color.parseColor("#F1A629"));
+                if(chapecoLaranja)coluna.get(2).setTextColor(Color.parseColor("#F1A629"));
+                if(jaraguaLaranja)coluna.get(3).setTextColor(Color.parseColor("#F1A629"));
+                if(joacabaLaranja)coluna.get(4).setTextColor(Color.parseColor("#F1A629"));
+                if(rioSulLaranja)coluna.get(5).setTextColor(Color.parseColor("#F1A629"));
+
+                if(somaLages<=0)coluna.get(0).setTextColor(Color.RED);
+                if(somaCanoinhas<=0)coluna.get(1).setTextColor(Color.RED);
+                if(somaChapeco<=0)coluna.get(2).setTextColor(Color.RED);
+                if(somaJaragua<=0)coluna.get(3).setTextColor(Color.RED);
+                if(somaJoacaba<=0)coluna.get(4).setTextColor(Color.RED);
+                if(somaRiosul<=0)coluna.get(5).setTextColor(Color.RED);
                 break;
 
             case 7:
-                c1.setText(vetorColuna[0]);
-                c2.setText(vetorColuna[1]);
-                c3.setText(vetorColuna[2]);
-                c4.setText(vetorColuna[3]);
-                c5.setText(vetorColuna[4]);
-                c6.setText(vetorColuna[5]);
-                c7.setText(vetorColuna[6]);
+                coluna.get(0).setText(vetorColuna[0]);
+                coluna.get(1).setText(vetorColuna[1]);
+                coluna.get(2).setText(vetorColuna[2]);
+                coluna.get(3).setText(vetorColuna[3]);
+                coluna.get(4).setText(vetorColuna[4]);
+                coluna.get(5).setText(vetorColuna[5]);
+                coluna.get(6).setText(vetorColuna[6]);
 
-                v1.setText(nf.format(somaLages));
-                v2.setText(nf.format(somaCanoinhas));
-                v3.setText(nf.format(somaChapeco));
-                v4.setText(nf.format(somaJaragua));
-                v5.setText(nf.format(somaJoacaba));
-                v6.setText(nf.format(somaRiosul));
-                v7.setText(nf.format(somaSulcata));
+                valores.get(0).setText(nf.format(somaLages));
+                valores.get(1).setText(nf.format(somaCanoinhas));
+                valores.get(2).setText(nf.format(somaChapeco));
+                valores.get(3).setText(nf.format(somaJaragua));
+                valores.get(4).setText(nf.format(somaJoacaba));
+                valores.get(5).setText(nf.format(somaRiosul));
+                valores.get(6).setText(nf.format(somaSulcata));
+                if(lagesLaranja)coluna.get(0).setTextColor(Color.parseColor("#F1A629"));
+                if(canoinhasLaranja)coluna.get(1).setTextColor(Color.parseColor("#F1A629"));
+                if(chapecoLaranja)coluna.get(2).setTextColor(Color.parseColor("#F1A629"));
+                if(jaraguaLaranja)coluna.get(3).setTextColor(Color.parseColor("#F1A629"));
+                if(joacabaLaranja)coluna.get(4).setTextColor(Color.parseColor("#F1A629"));
+                if(rioSulLaranja)coluna.get(5).setTextColor(Color.parseColor("#F1A629"));
+                if(sulCatarinenseLaranja)coluna.get(6).setTextColor(Color.parseColor("#F1A629"));
+
+
+                if(somaLages<=0)coluna.get(0).setTextColor(Color.RED);
+                if(somaCanoinhas<=0)coluna.get(1).setTextColor(Color.RED);
+                if(somaChapeco<=0)coluna.get(2).setTextColor(Color.RED);
+                if(somaJaragua<=0)coluna.get(3).setTextColor(Color.RED);
+                if(somaJoacaba<=0)coluna.get(4).setTextColor(Color.RED);
+                if(somaRiosul<=0)coluna.get(5).setTextColor(Color.RED);
+                if(somaSulcata<=0)coluna.get(6).setTextColor(Color.RED);
                 break;
 
             case 8:
-                c1.setText(vetorColuna[0]);
-                c2.setText(vetorColuna[1]);
-                c3.setText(vetorColuna[2]);
-                c4.setText(vetorColuna[3]);
-                c5.setText(vetorColuna[4]);
-                c6.setText(vetorColuna[5]);
-                c7.setText(vetorColuna[6]);
-                c8.setText(vetorColuna[7]);
+                coluna.get(0).setText(vetorColuna[0]);
+                coluna.get(1).setText(vetorColuna[1]);
+                coluna.get(2).setText(vetorColuna[2]);
+                coluna.get(3).setText(vetorColuna[3]);
+                coluna.get(4).setText(vetorColuna[4]);
+                coluna.get(5).setText(vetorColuna[5]);
+                coluna.get(6).setText(vetorColuna[6]);
+                coluna.get(7).setText(vetorColuna[7]);
 
-                v1.setText(nf.format(somaLages));
-                v2.setText(nf.format(somaCanoinhas));
-                v3.setText(nf.format(somaChapeco));
-                v4.setText(nf.format(somaJaragua));
-                v5.setText(nf.format(somaJoacaba));
-                v6.setText(nf.format(somaRiosul));
-                v7.setText(nf.format(somaSulcata));
-                v8.setText(nf.format(somaSaoMiguel));
+                valores.get(0).setText(nf.format(somaLages));
+                valores.get(1).setText(nf.format(somaCanoinhas));
+                valores.get(2).setText(nf.format(somaChapeco));
+                valores.get(3).setText(nf.format(somaJaragua));
+                valores.get(4).setText(nf.format(somaJoacaba));
+                valores.get(5).setText(nf.format(somaRiosul));
+                valores.get(6).setText(nf.format(somaSulcata));
+                valores.get(7).setText(nf.format(somaSaoMiguel));
+                if(lagesLaranja)coluna.get(0).setTextColor(Color.parseColor("#F1A629"));
+                if(canoinhasLaranja)coluna.get(1).setTextColor(Color.parseColor("#F1A629"));
+                if(chapecoLaranja)coluna.get(2).setTextColor(Color.parseColor("#F1A629"));
+                if(jaraguaLaranja)coluna.get(3).setTextColor(Color.parseColor("#F1A629"));
+                if(joacabaLaranja)coluna.get(4).setTextColor(Color.parseColor("#F1A629"));
+                if(rioSulLaranja)coluna.get(5).setTextColor(Color.parseColor("#F1A629"));
+                if(sulCatarinenseLaranja)coluna.get(6).setTextColor(Color.parseColor("#F1A629"));
+                if(saoMiguelOLaranja)coluna.get(7).setTextColor(Color.parseColor("#F1A629"));
+
+
+                if(somaLages<=0)coluna.get(0).setTextColor(Color.RED);
+                if(somaCanoinhas<=0)coluna.get(1).setTextColor(Color.RED);
+                if(somaChapeco<=0)coluna.get(2).setTextColor(Color.RED);
+                if(somaJaragua<=0)coluna.get(3).setTextColor(Color.RED);
+                if(somaJoacaba<=0)coluna.get(4).setTextColor(Color.RED);
+                if(somaRiosul<=0)coluna.get(5).setTextColor(Color.RED);
+                if(somaSulcata<=0)coluna.get(6).setTextColor(Color.RED);
+                if(somaSaoMiguel<=0)coluna.get(7).setTextColor(Color.RED);
                 break;
 
 
@@ -471,6 +547,7 @@ public class OrcamentoActivity extends AppCompatActivity {
         final EditText input = new EditText(this);
         // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
         input.setInputType(InputType.TYPE_CLASS_TEXT);
+        input.setText(m_Text);
         builder.setView(input);
 
         // Set up the buttons
@@ -522,4 +599,10 @@ public class OrcamentoActivity extends AppCompatActivity {
         }
         }
 
+
+    static final ButterKnife.Action<View> DISABLE = new ButterKnife.Action<View>() {
+        @Override public void apply(View view, int index) {
+            view.setEnabled(false);
+        }
+    };
 }

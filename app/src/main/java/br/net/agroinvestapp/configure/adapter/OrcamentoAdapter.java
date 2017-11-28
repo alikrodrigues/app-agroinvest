@@ -2,6 +2,7 @@ package br.net.agroinvestapp.configure.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,14 +18,7 @@ public class OrcamentoAdapter extends ArrayAdapter<Insumo> {
     private List<Insumo> insumos;
     private Context context;
     private String parametro;
-    private boolean lages=false;
-    private boolean canoinhas=false;
-    private boolean chapeco=false;
-    private boolean jaragua=false;
-    private boolean joacaba=false;
-    private boolean rioSul=false;
-    private boolean sulCatarinense=false;
-    private boolean saoMiguelOeste=false;
+
 
 
 
@@ -38,7 +32,14 @@ public class OrcamentoAdapter extends ArrayAdapter<Insumo> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = null;
-
+        boolean lages=false;
+        boolean canoinhas=false;
+        boolean chapeco=false;
+        boolean jaragua=false;
+        boolean joacaba=false;
+        boolean rioSul=false;
+        boolean sulCatarinense=false;
+        boolean saoMiguelOeste=false;
         if(insumos!=null){
 
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
@@ -148,8 +149,9 @@ public class OrcamentoAdapter extends ArrayAdapter<Insumo> {
                 }
             }
 
-            if(!lages&&!canoinhas&&!jaragua&&!joacaba&&
-                    !rioSul&&!saoMiguelOeste&&!chapeco&&!sulCatarinense)vermelhos.setVisibility(View.GONE);
+
+            if(!lages && !canoinhas && !jaragua && !joacaba &&
+                    !rioSul && !saoMiguelOeste && !chapeco && !sulCatarinense)vermelhos.setVisibility(View.GONE);
             else {
                 vermelhos.setTextColor(Color.RED);
                 String texto = "";

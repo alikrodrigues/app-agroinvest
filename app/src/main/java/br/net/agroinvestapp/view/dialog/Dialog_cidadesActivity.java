@@ -13,39 +13,34 @@ import br.net.agroinvestapp.R;
 import br.net.agroinvestapp.configure.JpdroidSQL.ConfiguracaoBanco;
 import br.net.agroinvestapp.model.Orcamento;
 import br.net.agroinvestapp.view.OrcamentoActivity;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class Dialog_cidadesActivity extends Activity {
 
     private long id;
     private String parametro;
-    private Switch lages;
-    private Switch canoinhas;
-    private Switch chapeco;
-    private Switch jaragua;
-    private Switch joacaba;
-    private Switch riodoSul;
-    private Switch sulCatarinense;
-    private Switch saoMiguelO;
+    @BindView(R.id.lagesSw) Switch lages;
+    @BindView(R.id.canoinhassw) Switch canoinhas;
+    @BindView(R.id.chapecosw) Switch chapeco;
+    @BindView(R.id.jaraguasw) Switch jaragua;
+    @BindView(R.id.joacabasw) Switch joacaba;
+    @BindView(R.id.riosw) Switch riodoSul;
+    @BindView(R.id.scsw) Switch sulCatarinense;
+    @BindView(R.id.smosw) Switch saoMiguelO;
     private Orcamento orcamento;
     private Jpdroid bancoDados;
-    private Button btnOK;
+    @BindView(R.id.btnOk) Button btnOK;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dialog_cidades);
+        ButterKnife.bind(this);
         Intent intent = getIntent();
         id = intent.getLongExtra("id",0);
 
-        lages =(Switch) findViewById(R.id.lagesSw);
-        canoinhas = (Switch) findViewById(R.id.canoinhassw);
-        chapeco = (Switch) findViewById(R.id.chapecosw);
-        jaragua =  (Switch) findViewById(R.id.jaraguasw);
-        joacaba = (Switch) findViewById(R.id.joacabasw);
-        riodoSul = (Switch) findViewById(R.id.riosw);
-        sulCatarinense = (Switch) findViewById(R.id.scsw);
-        saoMiguelO = (Switch) findViewById(R.id.smosw);
-        btnOK = (Button) findViewById(R.id.btnOk);
+
     }
 
     private void switches(){

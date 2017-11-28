@@ -19,7 +19,7 @@ import br.net.agroinvestapp.model.Orcamento;
 
 public class PrincipalActivity extends AppCompatActivity {
 
-    private AtualizaBancoHttoRequest atualizaBancoHttoRequest;
+
     private Toolbar toolbar;
     private String[] permissoesNescessarias = new String[]{
             Manifest.permission.ACCESS_NETWORK_STATE,
@@ -35,11 +35,7 @@ public class PrincipalActivity extends AppCompatActivity {
         Permissao.validaPermissao(1,this,permissoesNescessarias);
 
 
-        try {
-            atualizarBancoDadosLocal();
-        }catch (Exception e){
 
-        }
     }
 
 
@@ -70,25 +66,5 @@ public class PrincipalActivity extends AppCompatActivity {
     }
 
 
-    private void atualizarBancoDadosLocal(){
-        if(verificaConexao()) {
-            atualizaBancoHttoRequest = new AtualizaBancoHttoRequest(this);
-            atualizaBancoHttoRequest.execute();
-        }else
-            Toast.makeText(this,"Conecte-se a internet para coletar os preços",Toast.LENGTH_LONG).show();
-    }
-
-    public  boolean verificaConexao() {
-        boolean conectado;
-        ConnectivityManager conectivtyManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (conectivtyManager.getActiveNetworkInfo() != null
-                && conectivtyManager.getActiveNetworkInfo().isAvailable()
-                && conectivtyManager.getActiveNetworkInfo().isConnected()) {
-            conectado = true;
-        } else {
-            conectado = false;
-        }
-        return conectado;
-    }
 
 }

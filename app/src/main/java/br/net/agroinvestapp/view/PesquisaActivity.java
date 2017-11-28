@@ -10,19 +10,32 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
 import br.net.agroinvestapp.R;
+import butterknife.BindDrawable;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class PesquisaActivity extends AppCompatActivity {
 
-    private Switch lages;
-    private Switch canoinhas;
-    private Switch chapeco;
-    private Switch jaragua;
-    private Switch joacaba;
-    private Switch riodoSul;
-    private Switch sulCatarinense;
-    private Switch saoMiguelO;
-    private EditText edtPesquisa;
-    private ImageView imageView;
+    @BindView(R.id.lagesSwitch)
+    Switch lages;
+    @BindView(R.id.canoinhasSwitch)
+    Switch canoinhas;
+    @BindView(R.id.chapecoSwitch)
+    Switch chapeco;
+    @BindView(R.id.jaraguaSwitch)
+    Switch jaragua;
+    @BindView(R.id.joacabaSwitch)
+    Switch joacaba;
+    @BindView(R.id.rioSwitch)
+    Switch riodoSul;
+    @BindView(R.id.sulCSwitch)
+    Switch sulCatarinense;
+    @BindView(R.id.smoSwitch)
+    Switch saoMiguelO;
+    @BindView(R.id.edtPesquisa)
+    EditText edtPesquisa;
+    @BindView(R.id.imageButton)
+    ImageView imageView;
     private Toolbar toolbar;
 
 
@@ -33,17 +46,8 @@ public class PesquisaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pesquisa);
 
+        ButterKnife.bind(this);
 
-        lages =(Switch) findViewById(R.id.lagesSwitch);
-        canoinhas = (Switch) findViewById(R.id.canoinhasSwitch);
-        chapeco = (Switch) findViewById(R.id.chapecoSwitch);
-        jaragua =  (Switch) findViewById(R.id.jaraguaSwitch);
-        joacaba = (Switch) findViewById(R.id.joacabaSwitch);
-        riodoSul = (Switch) findViewById(R.id.rioSwitch);
-        sulCatarinense = (Switch) findViewById(R.id.sulCSwitch);
-        saoMiguelO = (Switch) findViewById(R.id.smoSwitch);
-        edtPesquisa = (EditText) findViewById(R.id.edtPesquisa);
-        imageView = (ImageView) findViewById(R.id.imageButton);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,13 +66,7 @@ public class PesquisaActivity extends AppCompatActivity {
 
     private void ativaTodos(){
         lages.setChecked(true);
-//        canoinhas.setChecked(true);
-//        chapeco.setChecked(true);
-//        jaragua.setChecked(true);
-//        joacaba.setChecked(true);
-//        riodoSul.setChecked(true);
-//        sulCatarinense.setChecked(true);
-//        saoMiguelO.setChecked(true);
+
     }
 
     private void buscarDados(){
